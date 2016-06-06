@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Interview_Preparaation</string>
+    <string name="service_name">Service Class</string>
 </resources>
