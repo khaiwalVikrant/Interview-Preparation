@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.tech_nopro.R;
+import com.tech_nopro.utility.Utility;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,8 @@ By default, a service runs in the same process as the main thread of the applica
 Foreground services
 
 A foreground service is a service that should have the same priority as an active activity and therefore should not be killed by the Android system, even if the system is low on memory.
-A foreground service must provide a notification for the status bar, which is placed under the "Ongoing" heading, which means that the notification cannot be dismissed unless the service is either stopped or removed from the foreground.
+A foreground service must provide a notification for the status bar, which is placed under the "Ongoing" heading, which means that the notification cannot be dismissed unless the service is either stopped
+    or removed from the foreground.
 
 Thread : is a O.S level feature that allow you to do some operation in the background.
 
@@ -54,6 +56,7 @@ public class Example_Service extends ListActivity {
     private ArrayAdapter<String> adapter;
     private List<String> wordList;
     private ServiceClass serviceClass;
+    private boolean mIsBound;
 
     @Override
     protected void onCreate(Bundle saveInstance){
@@ -61,8 +64,8 @@ public class Example_Service extends ListActivity {
         setContentView(R.layout.service_layout);
 
         wordList = new ArrayList<String>();
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1, android.R.id.text1);
-
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, wordList);
+        Utility.print("Size: " + wordList.size());
         setListAdapter(adapter);
         // use this to start and trigger a service
         //Intent i= new Intent(getApplicationContext(), ServiceClass.class);
@@ -74,26 +77,51 @@ public class Example_Service extends ListActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        Utility.print("onPause");
         unbindService(mConnection);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
+        Utility.print("onResume");
         Intent intent = new Intent(this, ServiceClass.class);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+    }
+//    void doBindService() {
+//        // Establish a connection with the service.  We use an explicit
+//        // class name because we want a specific service implementation that
+//        // we know will be running in our own process (and thus won't be
+//        // supporting component replacement by other applications).
+//        bindService(new Intent(Example_Service.this,
+//                ServiceClass.class), mConnection, Context.BIND_AUTO_CREATE);
+//        mIsBound = true;
+//    }
+
+    void doUnbindService() {
+        if (mIsBound) {
+            // Detach our existing connection.
+            unbindService(mConnection);
+            mIsBound = false;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        doUnbindService();
     }
     private ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            ServiceClass.MyBinder b = (ServiceClass.MyBinder) service;
-            serviceClass = b.getService();
-
+//            ServiceClass.MyBinder b = (ServiceClass.MyBinder) service;
+//            serviceClass = b.getService();
+            serviceClass = ((ServiceClass.MyBinder) service).getService();
+            Utility.print("Service Connection connected");
             Toast.makeText(Example_Service.this, "Connected", Toast.LENGTH_SHORT);
         }
 
-        @Override
+        //@Override
         public void onServiceDisconnected(ComponentName name) {
             serviceClass = null;
         }

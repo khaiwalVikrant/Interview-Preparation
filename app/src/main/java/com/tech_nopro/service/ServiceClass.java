@@ -6,6 +6,8 @@ import android.content.res.Configuration;
 import android.os.Binder;
 import android.os.IBinder;
 
+import com.tech_nopro.utility.Utility;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -44,6 +46,7 @@ public class ServiceClass extends Service {
 	private ArrayList<String> list = new ArrayList<String>();
 	public class MyBinder extends Binder {
 		ServiceClass getService() {
+			Utility.print("MyBinder constructor");
 			return ServiceClass.this;
 		}
 	}
@@ -63,6 +66,7 @@ public class ServiceClass extends Service {
 		If you implement this method, you must provide an interface that clients use to communicate with the service, by returning an IBinder object.
 		You must always implement this method, but if you don't want to allow binding, then you should return null.
 		 */
+		Utility.print("Binder"+getWordList());
 		return mBinder;
 	}
 
@@ -82,7 +86,8 @@ public class ServiceClass extends Service {
 										The service is only restarted if the runtime has pending startService() calls since the service termination.
 		3. Service.START_REDELIVER_INTENT:- Similar to Service.START_STICKY but the original Intent is re-delivered to the onStartCommand method.
 		 */
-		System.out.println("onStartCommand");
+
+		Utility.print("StartCommand");
 		Random random = new Random();
 		if (random.nextBoolean()) {
 			list.add("Linux");
@@ -96,10 +101,11 @@ public class ServiceClass extends Service {
 		if (random.nextBoolean()) {
 			list.add("Windows7");
 		}
+		Utility.print("List Size : " + list.size());
 		if (list.size() >= 20) {
 			list.remove(0);
 		}
-		return Service.START_NOT_STICKY;
+		return Service.START_STICKY;
 	}
 
 	@Override
@@ -108,12 +114,14 @@ public class ServiceClass extends Service {
 		The system calls this method when the service is first created using onStartCommand() or onBind(). This call is required to perform one-time set-up.
 		 */
 		super.onCreate();
+		Utility.print("Create");
 	}
 
-	@Override
-	public void onStart(Intent intent, int startId) {
-		super.onStart(intent, startId);
-	}
+//	@Override
+//	public void onStart(Intent intent, int startId) {
+//		super.onStart(intent, startId);
+//		Utility.print("onStart");
+//	}
 
 	@Override
 	public void onDestroy() {
@@ -122,6 +130,7 @@ public class ServiceClass extends Service {
 		registered listeners, receivers, etc.
 		 */
 		super.onDestroy();
+		Utility.print("Destroy");
 	}
 
 	@Override

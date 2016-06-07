@@ -18,10 +18,12 @@
         </activity>
         <service
             android:name=".service.ServiceClass"
+            android:enabled="true"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/service_name">
         </service>
-        <receiver android:name=".service.ScheduleReceiver">
+        <receiver android:name=".service.ScheduleReceiver"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"></action>
             </intent-filter>
