@@ -12,8 +12,23 @@
             android:id="@+id/startService" />
 
         <Button
-            android:text="Button"
+            android:text="Intent Service"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/button2" />
+            android:id="@+id/intentService" />
+        <Button
+            android:text="Handler Example"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/handler" />
+        <Button
+            android:text="Handler Thread"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/handlerThread" />
+        <Button
+            android:text="Async Task"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/asynctask" />
 </LinearLayout>

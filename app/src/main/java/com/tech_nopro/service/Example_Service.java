@@ -50,6 +50,14 @@ i. What will happen if user closes the activity, while still thread is running i
 ii.Assume that in continuation for above scenario, even after killing activity your thread continued to do its intended operation. Then there is a low memory situation arises in your phone. Then this application will be the first susceptible app to be killed as there is no priority for this application.
 
 So bottom line is: If you want to do some heavy background functionality then it is always better to have a service with thread. If you feel that that background functionality to be alive as long as your activity is alive, then go for activity with thread or activity with async task.
+
+
+ MOST IMPORTANT
+ If you’ve worked with Services closely, you should know that this is actually a little misleading. A common misconception is that Services run on the background thread.
+  Nope! they “appear” to run in the background because they don’t have a UI component associated with them. They actually run on the UI thread (by default)…. So they run on the UI thread by default,
+  even though they don’t have a UI component?
+If you want your service to run on a background thread, you’ll have to manually spawn another thread and execute your operations in that thread (similar to an approach discussed above).
+Really you should just use IntentServices but that is a subject for another post.
  */
 public class Example_Service extends ListActivity {
 
